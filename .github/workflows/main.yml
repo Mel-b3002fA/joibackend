@@ -16,4 +16,4 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://cenv:$HF_TOKEN@huggingface.co/spaces/cenv/joisecond main
+        run: git push https://cenv:$HF_TOKEN@huggingface.co/spaces/cenv/joi main
