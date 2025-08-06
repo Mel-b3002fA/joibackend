@@ -12,6 +12,8 @@ jobs:
         with:
           fetch-depth: 0  # Fetch full Git history for pushing.
           lfs: true       # Enable Git LFS for large files, if used.
+      - name: Check LFS files
+        run: git lfs ls-files
       - name: Debug Git remotes
         run: |
           # List all Git remotes and their URLs to verify the 'space' remote.
