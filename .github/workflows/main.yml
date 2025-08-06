@@ -13,9 +13,8 @@ jobs:
           fetch-depth: 0
           lfs: true
       - name: Add Hugging Face remote
-        run: git remote add space https://huggingface.co/spaces/cenv/joi || true
+        run: git remote set-url space https://cenv:${HF_TOKEN}@huggingface.co/spaces/cenv/joi || git remote add space https://cenv:${HF_TOKEN}@huggingface.co/spaces/cenv/joi
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          git push --verbose space main
+        run: git push --verbose space main
