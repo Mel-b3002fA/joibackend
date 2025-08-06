@@ -34,6 +34,11 @@ jobs:
         run: |
           # Verify the 'space' remote URL after setting it.
           git remote -v
+      - name: Pull remote changes
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Ensure HF_TOKEN is available.
+        run: |
+          git pull --rebase space main
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Ensure HF_TOKEN is available.
