@@ -10,11 +10,34 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-          lfs: true
+          fetch-depth: 0  # Fetch full Git history for pushing.
+          lfs: true       # Enable Git LFS for large files, if used.
+      - name: Debug Git remotes
+        run: |
+          # List all Git remotes and their URLs to verify the 'space' remote.
+          git remote -v
+      - name: Debug Git config
+        run: |
+          # Show Git configuration to check user settings and other details.
+          git config --list
       - name: Add Hugging Face remote
-        run: git remote set-url space https://cenv:${HF_TOKEN}@huggingface.co/spaces/cenv/joi || git remote add space https://cenv:${HF_TOKEN}@huggingface.co/spaces/cenv/joi
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Inject HF_TOKEN for authentication.
+        run: |
+          # Remove any existing 'space' remote to avoid conflicts.
+          git remote remove space || true
+          # Add the remote with credentials. Replace 'cenv' with your Hugging Face username.
+          git remote add space https://cenv:${HF_TOKEN}@huggingface.co/spaces/cenv/joi
+      - name: Debug remote after setup
+        run: |
+          # Verify the 'space' remote URL after setting it.
+          git remote -v
       - name: Push to hub
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --verbose space main
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Ensure HF_TOKEN is available.
+        run: |
+          # Configure Git user to avoid authorship issues.
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          # Push to the 'main' branch of the Hugging Face Space with verbose output.
+          git push --verbose space main
